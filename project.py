@@ -18,15 +18,12 @@ def main():
     with open("etc.txt", "r", encoding='utf-8') as fileReader:
         ids_by_line = []
         for line in fileReader:
-            line = line.strip()
-            if not line:
-                continue
-            
             buildup = ""
 
             # ids = []
 
             looking_for_more_sym = False
+            inside_string = False
 
             # TODO: Specialized logic for stringConst
             for char in line:
