@@ -33,13 +33,22 @@ def main():
                     if looking_for_more_sym:
                         looking_for_more_sym = False
                         status(buildup)
-                        buildup = char
+                        if (char in [">", "="]):
+                            buildup += char
+                        else:
+                            status(buildup)
+                            buildup = char
                     else:
                         buildup += char
                 elif char in sym:
                     if looking_for_more_sym:
                         looking_for_more_sym = False
-                        buildup += char
+                        if (char in [">", "="]):
+                            buildup += char
+                        else:
+                            status(buildup)
+                            buildup = char
+
                         status(buildup)
                         buildup = ""
                     else:
