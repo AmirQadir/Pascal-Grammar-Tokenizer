@@ -1,7 +1,8 @@
 keywords = {"program", "var", "real", "integer", "if", "then", "else", "while", "repeat", "readln", "write", "writeln",
                 "or", "div", "mod",
                 "and", "true", "false", "not", "trunc", "do", "until","end", "begin"}
-sym = {";", ".", ":", ":=", "+", "-", "*", "/", "(", ")", "<", ">", "<=", ">=", "<>", "="}
+sym  = {";", ".", ":", ":=", "+", "-", "*", "/", "(", ")", "<", ">", "<=", ">=", "<>", "="}
+dsym = { ":", "<", ">" }
 
 def status(buildup):
     if buildup.strip():
@@ -33,28 +34,28 @@ def main():
                     if looking_for_more_sym:
                         looking_for_more_sym = False
                         status(buildup)
-                        if (char in [">", "="]):
-                            buildup += char
-                        else:
-                            status(buildup)
-                            buildup = char
+                        buildup = char
                     else:
                         buildup += char
                 elif char in sym:
                     if looking_for_more_sym:
                         looking_for_more_sym = False
-                        if (char in [">", "="]):
-                            buildup += char
-                        else:
+                        backup = buildup
+                        buildup += char
+                        if buildup in sym:
                             status(buildup)
+                            buildup = ""
+                        else:
+                            status(backup)
                             buildup = char
-
-                        status(buildup)
-                        buildup = ""
                     else:
                         status(buildup)
-                        looking_for_more_sym = True
                         buildup = char
+                        if char in dsym:
+                            looking_for_more_sym = True
+                        else:
+                            status(buildup)
+                            buildup = ""
                 else:
                     status(buildup)
                     buildup = ""
