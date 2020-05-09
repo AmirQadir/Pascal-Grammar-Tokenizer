@@ -4,6 +4,8 @@ keywords = {"program", "var", "real", "integer", "if", "then", "else", "while", 
 sym  = {";", ".", ":", ":=", "+", "-", "*", "/", "(", ")", "<", ">", "<=", ">=", "<>", "="}
 dsym = { ":", "<", ">" }
 
+import Processor
+
 def status(buildup):
     if buildup.strip():
         if buildup in keywords:
@@ -16,51 +18,9 @@ def status(buildup):
 
 def main():
     with open("etc.txt", "r", encoding='utf-8') as fileReader:
-        ids_by_line = []
-        for line in fileReader:
-            buildup = ""
-
-            # ids = []
-
-            looking_for_more_sym = False
-            inside_string = False
-
-            # TODO: Specialized logic for stringConst
-            for char in line:
-                if char not in sym and char != " ":
-                    if looking_for_more_sym:
-                        looking_for_more_sym = False
-                        status(buildup)
-                        buildup = char
-                    else:
-                        buildup += char
-                elif char in sym:
-                    if looking_for_more_sym:
-                        looking_for_more_sym = False
-                        backup = buildup
-                        buildup += char
-                        if buildup in sym:
-                            status(buildup)
-                            buildup = ""
-                        else:
-                            status(backup)
-                            buildup = char
-                    else:
-                        status(buildup)
-                        buildup = char
-                        if char in dsym:
-                            looking_for_more_sym = True
-                        else:
-                            status(buildup)
-                            buildup = ""
-                else:
-                    status(buildup)
-                    buildup = ""
-            
-            status(buildup)
-            buildup = ""
-
-            # ids_by_line.append(id)
+        for line_number, line in enumerate(fileReader):
+            lp = Processor.LineProcessor(line_number, line)
+            lp.process()
 
 
 if __name__ == "__main__":

@@ -31,10 +31,10 @@ begin
         end
     end;
 
-    write(“Factorial of ”);
+    write("Factorial of ");
     write(number);
-    write(“ is ”);
+    write(" is ");
     writeln(factorial);
-    write(“Some odd value is: ”);
+    write("Some odd value is: ");
     writeln(volume);
 end.
