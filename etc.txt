@@ -10,7 +10,7 @@ var
 begin
     number := 6;
     counter := number;
-    factorial := 1
+    factorial := 1;
 
     while counter > 0 do begin
     number := number * counter;
