@@ -14,7 +14,7 @@ begin
 
     while counter > 0 do begin
     number := number * counter;
-    counter := counter – 1;
+    counter := counter - 1;
     end;
 
     height := 8.5;
