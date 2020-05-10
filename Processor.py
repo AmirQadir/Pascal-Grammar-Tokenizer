@@ -12,9 +12,11 @@ stack = []
 
 file = open("token_list.csv", "w", newline = '')
 fileWriter = csv.writer(file)
+fileWriter.writerow(["Token Type", "Lexeme", "Line Number", "Position"])
 
 file2 =  open("symboltable.csv", "w", newline='')
 fileWriter2 =  csv.writer(file2)
+fileWriter2.writerow(["Identifier", "Type"])
 
 
 class AbstractProcessor:
@@ -166,26 +168,22 @@ class LineProcessor(AbstractProcessor):
         idx = 0
         position = 0
         while idx < len(self.line):
-
+            position +=1
             if self.line[idx] == '"':
-                position += 1
-                processor = StringProcessor(self.line[idx + 1:], self.line_number, position)
+                processor = StringProcessor(self.line[idx + 1:], self.line_number, idx + 1)
 
             elif self.line[idx].isdigit():
-                position += 1
-                processor = NumberProcessor(self.line[idx:], self.line_number, position)
+                processor = NumberProcessor(self.line[idx:], self.line_number, idx + 1)
 
             elif self.line[idx] in sym:
-                position += 1
-                processor = SymbolProcessor(self.line[idx:], self.line_number, position)
+                processor = SymbolProcessor(self.line[idx:], self.line_number, idx + 1)
 
             elif self.line[idx].isspace():
                 idx += 1
                 continue
             
             else:
-                position += 1
-                processor = WordProcessor(self.line[idx:], self.line_number, position)
+                processor = WordProcessor(self.line[idx:], self.line_number, idx + 1)
 
             x = processor.process()
 
