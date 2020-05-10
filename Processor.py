@@ -49,7 +49,7 @@ class StringProcessor(AbstractProcessor):
         stringConst.append(string)
         fileWriter.writerow(["stringConst", string, self.line_number, self.position])
 
-        print("STRING:", string)
+        #print("STRING:", string)
 
         return idx + 2
 
@@ -74,19 +74,19 @@ class WordProcessor(AbstractProcessor):
         if word in keywords:
             fileWriter.writerow(["keyword", word, self.line_number, self.position])
 
-            print("KEYWORD:", word)
+            #print("KEYWORD:", word)
         elif word in type:
             fileWriter.writerow(["keyword", word, self.line_number, self.position])
             # symbol table logic
 
 
-            print("TYPE:", word)
+            #print("TYPE:", word)
             if (len(stack) > 0):
                 value = stack.pop()
                 fileWriter2.writerow([value, word])
         else:
             fileWriter.writerow(["id", word, self.line_number, self.position])
-            print("ID:", word)
+            #print("ID:", word)
             stack.append(word)
         
         return idx
@@ -116,7 +116,7 @@ class NumberProcessor(AbstractProcessor):
                 number += self.line[idx]
                 idx += 1
         intConst.append(number)
-        print("NUMBER:", number)
+        #print("NUMBER:", number)
         fileWriter.writerow(["intConst", number, self.line_number, self.position])
 
 
@@ -152,7 +152,7 @@ class SymbolProcessor(AbstractProcessor):
             symbol += self.line[idx]
             idx += 1
         
-        print("SYM:", symbol)
+        #print("SYM:", symbol)
         fileWriter.writerow(["sym", symbol, self.line_number, self.position])
         return idx
 
