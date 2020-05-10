@@ -1,13 +1,23 @@
-keywords = {"program", "var", "real", "integer", "if", "then", "else", "while", "repeat", "readln", "write", "writeln",
+import csv
+keywords = {"program", "var", "if", "then", "else", "while", "repeat", "readln", "write", "writeln",
                 "or", "div", "mod",
                 "and", "true", "false", "not", "trunc", "do", "until","end", "begin"}
 sym  = {";", ".", ":", ":=", "+", "-", "*", "/", "(", ")", "<", ">", "<=", ">=", "<>", "="}
 dsym = { ":", "<", ">" }
+type = {"integer", "real"}
+stringConst = []
+intConst = []
+
+file = open("token_list.csv", "w", newline = '')
+fileWriter = csv.writer(file)
+
 
 class AbstractProcessor:
 
-    def __init__(self, line):
+    def __init__(self,line, line_number, position):
         self.line = line
+        self.line_number = line_number
+        self.position = position
 
     
     def process(self):
@@ -16,8 +26,10 @@ class AbstractProcessor:
 
 class StringProcessor(AbstractProcessor):
 
-    def __init__(self, line):
+    def __init__(self, line, line_number, position):
         self.line = line
+        self.line_number = line_number
+        self.position = position
     
     
     def process(self):
@@ -27,7 +39,9 @@ class StringProcessor(AbstractProcessor):
         while self.line[idx] != '"':
             string += self.line[idx]
             idx += 1
-        
+        stringConst.append(string)
+        fileWriter.writerow(["stringConst", string, self.line_number, self.position])
+
         print("STRING:", string)
 
         return idx + 2
@@ -35,8 +49,10 @@ class StringProcessor(AbstractProcessor):
 
 class WordProcessor(AbstractProcessor):
 
-    def __init__(self, line):
+    def __init__(self, line, line_number, position):
         self.line = line
+        self.line_number = line_number
+        self.position = position
     
     
     def process(self):
@@ -49,8 +65,15 @@ class WordProcessor(AbstractProcessor):
             idx += 1
         
         if word in keywords:
+            fileWriter.writerow(["keyword", word, self.line_number, self.position])
+
             print("KEYWORD:", word)
+        elif word in type:
+            fileWriter.writerow(["keyword", word, self.line_number, self.position])
+
+            print("TYPE:", word)
         else:
+            fileWriter.writerow(["id", word, self.line_number, self.position])
             print("ID:", word)
         
         return idx
@@ -58,8 +81,10 @@ class WordProcessor(AbstractProcessor):
 
 class NumberProcessor(AbstractProcessor):
 
-    def __init__(self, line):
+    def __init__(self, line, line_number, position):
         self.line = line
+        self.line_number = line_number
+        self.position = position
     
     
     def process(self):
@@ -77,16 +102,20 @@ class NumberProcessor(AbstractProcessor):
             while self.line[idx].isdigit():
                 number += self.line[idx]
                 idx += 1
-        
+        intConst.append(number)
         print("NUMBER:", number)
+        fileWriter.writerow(["intConst", number, self.line_number, self.position])
+
 
         return idx
 
 
 class SymbolProcessor(AbstractProcessor):
 
-    def __init__(self, line):
+    def __init__(self, line, line_number, position):
         self.line = line
+        self.line_number = line_number
+        self.position = position
     
     
     def process(self):
@@ -111,7 +140,7 @@ class SymbolProcessor(AbstractProcessor):
             idx += 1
         
         print("SYM:", symbol)
-        
+        fileWriter.writerow(["sym", symbol, self.line_number, self.position])
         return idx
 
 
@@ -124,22 +153,24 @@ class LineProcessor(AbstractProcessor):
     
     def process(self):
         idx = 0
+        position = 0
         while idx < len(self.line):
+            position+=1
             if self.line[idx] == '"':
-                processor = StringProcessor(self.line[idx + 1:])
+                processor = StringProcessor(self.line[idx + 1:], self.line_number, position)
 
             elif self.line[idx].isdigit():
-                processor = NumberProcessor(self.line[idx:])
+                processor = NumberProcessor(self.line[idx:], self.line_number, position)
 
             elif self.line[idx] in sym:
-                processor = SymbolProcessor(self.line[idx:])
+                processor = SymbolProcessor(self.line[idx:], self.line_number, position)
 
             elif self.line[idx].isspace():
                 idx += 1
                 continue
             
             else:
-                processor = WordProcessor(self.line[idx:])
+                processor = WordProcessor(self.line[idx:], self.line_number, position)
 
             x = processor.process()
 
