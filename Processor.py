@@ -76,7 +76,6 @@ class WordProcessor(AbstractProcessor):
         elif word in type:
             fileWriter.writerow(["keyword", word, self.line_number, self.position])
             # symbol table logic
-
             # print("TYPE:", word)
             if (len(stack) > 0):
                 value = stack.pop()
