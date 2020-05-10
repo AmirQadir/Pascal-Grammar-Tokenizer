@@ -8,8 +8,13 @@ type = {"integer", "real"}
 stringConst = []
 intConst = []
 
+stack = []
+
 file = open("token_list.csv", "w", newline = '')
 fileWriter = csv.writer(file)
+
+file2 =  open("symboltable.csv", "w", newline='')
+fileWriter2 =  csv.writer(file2)
 
 
 class AbstractProcessor:
@@ -70,11 +75,17 @@ class WordProcessor(AbstractProcessor):
             print("KEYWORD:", word)
         elif word in type:
             fileWriter.writerow(["keyword", word, self.line_number, self.position])
+            # symbol table logic
+
 
             print("TYPE:", word)
+            if (len(stack) > 0):
+                value = stack.pop()
+                fileWriter2.writerow([value, word])
         else:
             fileWriter.writerow(["id", word, self.line_number, self.position])
             print("ID:", word)
+            stack.append(word)
         
         return idx
 
