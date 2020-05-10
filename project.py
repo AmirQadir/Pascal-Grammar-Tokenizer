@@ -19,7 +19,8 @@ def status(buildup):
 def main():
     with open("etc.txt", "r", encoding='utf-8') as fileReader:
         for line_number, line in enumerate(fileReader):
-            lp = Processor.LineProcessor(line_number, line)
+
+            lp = Processor.LineProcessor(line_number + 1, line)
             lp.process()
 
 

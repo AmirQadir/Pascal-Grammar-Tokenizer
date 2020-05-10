@@ -155,14 +155,17 @@ class LineProcessor(AbstractProcessor):
         idx = 0
         position = 0
         while idx < len(self.line):
-            position+=1
+
             if self.line[idx] == '"':
+                position += 1
                 processor = StringProcessor(self.line[idx + 1:], self.line_number, position)
 
             elif self.line[idx].isdigit():
+                position += 1
                 processor = NumberProcessor(self.line[idx:], self.line_number, position)
 
             elif self.line[idx] in sym:
+                position += 1
                 processor = SymbolProcessor(self.line[idx:], self.line_number, position)
 
             elif self.line[idx].isspace():
@@ -170,6 +173,7 @@ class LineProcessor(AbstractProcessor):
                 continue
             
             else:
+                position += 1
                 processor = WordProcessor(self.line[idx:], self.line_number, position)
 
             x = processor.process()
