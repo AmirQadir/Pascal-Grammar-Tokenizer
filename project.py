@@ -1,9 +1,3 @@
-keywords = {"program", "var", "real", "integer", "if", "then", "else", "while", "repeat", "readln", "write", "writeln",
-                "or", "div", "mod",
-                "and", "true", "false", "not", "trunc", "do", "until","end", "begin"}
-sym  = {";", ".", ":", ":=", "+", "-", "*", "/", "(", ")", "<", ">", "<=", ">=", "<>", "="}
-dsym = { ":", "<", ">" }
-
 import Processor
 
 
