@@ -6,15 +6,7 @@ dsym = { ":", "<", ">" }
 
 import Processor
 
-def status(buildup):
-    if buildup.strip():
-        if buildup in keywords:
-            print("KEYWORD:", buildup)
-        elif buildup in sym:
-            print("SYM:", buildup)
-        else:
-            print("ID:", buildup)
-            # ids.append(buildup)
+
 
 def main():
     with open("pascalCode.pas", "r", encoding='utf-8') as fileReader:
